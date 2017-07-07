@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+    {% if me.message or rival.message %}
+        <div class=error>
+            <p>{{ me.message }}</p>
+            <p>{{ rival.message }}</p>
+        </div>
+    {% else%}
+        <img src={{ graph.url }}>
+    {% endif %}
+    <form action="{{ url_for('show_graph') }}" method=post>
+        <dl>
+            <dt>You:
+            <dd><input type=text name=username>
+            <dt>Rival:
+            <dd><input type=text name=rivalname>
+            <dd><input type=submit value=Show graph>
+        </dl>
+    </form>
+{% endblock %}
