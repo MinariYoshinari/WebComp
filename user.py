@@ -2,13 +2,19 @@ import requests
 from bs4 import BeautifulSoup
 import datetime
 from collections import OrderedDict
+import time
 
 class User:
     def __init__(self, id):
         self.id = id
         self.performances = self.__get_performances(id)
         if self.performances is None:
-            self.message = 'The user name "{}" is wrong.'.format(id)
+            if id:
+                self.message = 'The user name "{}" is incorrect.'.format(id)
+            else:
+                self.message = ''
+            self.max = None
+            self.min = None
             return
         else:
             self.message = ""
@@ -17,6 +23,7 @@ class User:
     
     def __get_performances(self, id):
         request = requests.get('https://atcoder.jp/user/{}/history'.format(id))
+        time.sleep(0.5)
         bs_obj = BeautifulSoup(request.text, 'html.parser')
         table = bs_obj.find('table', id='history')
 

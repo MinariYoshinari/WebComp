@@ -1,5 +1,4 @@
 # all the imports
-import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from contextlib import closing
 
@@ -17,7 +16,7 @@ app.config.from_object(__name__)
 def create_graph(username="Noimin", rivalname="tourist"):
     me = User(username)
     rival = User(rivalname)
-    if me.message or rival.message:
+    if me.message:
         return render_template('show_graph.html', me=me, rival=rival)
     graph = Graph(me, rival)
     return render_template('show_graph.html', me=me, rival=rival, graph=graph)
