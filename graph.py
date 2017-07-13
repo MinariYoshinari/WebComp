@@ -1,12 +1,18 @@
 from collections import OrderedDict
+import datetime
 from user import User
 
 class Graph:
     def __init__(self, *users):
         self.users = [user for user in users if user.performances is not None]
+        self.dates = {}
         self.url = self.__generate_graph_url()
 
     def __generate_graph_url(self):
+        
+        def datetime_to_label(dt):
+            return "{}-{}-{}".format(dt.year, dt.month, dt.day)
+
         max_ = max(user.max for user in self.users)
         min_ = min(user.min for user in self.users)
         upper_limit = (max_// 400 + 1) * 400
@@ -16,23 +22,27 @@ class Graph:
         #, "519c4c", "7f5593")
 
         merged_performances = self.__merge_performances()
-        url = "http://chart.apis.google.com/chart?chs=400x300&chd=t:"
+        min_date = min(merged_performances.keys())
         max_date = max(merged_performances.keys())
-        dates_url = ",".join([str(int(date_int/max_date * 100.0)) for date_int in merged_performances.keys()]) + "|"
+        #いー感じにURL作ってくれるメソッドがあったはずでは？
+        url = "http://chart.apis.google.com/chart?chs=400x300&chd=t:"
+        dates_url = ",".join([str(date_int) for date_int in merged_performances.keys()]) + "|"
         for i in range(len(self.users)):
             url += dates_url
             for contest in merged_performances.values():
-                url += str(float(contest[i] - lower_limit)/float(upper_limit - lower_limit) * 100.0) + ","
+                url += str(contest[i]) + ","
             url = url[:-1] + "|"
         url = url[:-1]
         url += "&cht=lxy"
         url += "&chxt=x,y"
+        url += "&chxl=0:|{}|{}".format(datetime_to_label(self.dates[min_date]), datetime_to_label(self.dates[max_date]))
+        url += "&chds=a"    #目盛の自動調整
         url += "&chdl=" + "|".join([user.id for user in self.users])
         url += "&chco=" + ",".join([colors[i] for i in range(len(self.users))])
         # 将来4色対応するとき用
         # url += "&chco=" + ",".join([colors[i % len(colors)] for i in range(len(self.users))])
         # url += "&chf=bg,s,eeeeee|c,ls,90,99ffff,0.1,ffff99,0.1"
-        
+        print(url)
         return url
 
     def __merge_performances(self):
@@ -52,7 +62,9 @@ class Graph:
                     lasts[i] = user.performances[date]
                 else:
                     results.append(lasts[i])
-            merged_performances[self.__timedelta_to_int(date-min_date)] = results
+            date_int = self.__timedelta_to_int(date-min_date)
+            merged_performances[date_int] = results
+            self.dates[date_int] = date;
         import pprint; pprint.pprint(merged_performances)
         return merged_performances
 
