@@ -1,0 +1,1 @@
+web: gunicorn atcoder_performances:app --log-file -
