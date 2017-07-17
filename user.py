@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import datetime
 from collections import OrderedDict
+from itertools import islice
 import time
 
 class User:
@@ -9,17 +10,16 @@ class User:
         self.id = id
         self.performances = self.__get_performances(id)
         if self.performances is None:
-            if id:
-                self.message = 'The user name "{}" is incorrect.'.format(id)
-            else:
-                self.message = ''
             self.max = None
             self.min = None
+            self.avg = None
+            self.avg5 = None
             return
         else:
-            self.message = ""
             self.max = self.__get_max(self.performances)
             self.min = self.__get_min(self.performances)
+            self.avg = round(sum(self.performances.values()) / len(self.performances))
+            self.avg5 = round(sum(islice(self.performances.values(), 5)) / 5)
     
     def __get_performances(self, id):
         request = requests.get('https://atcoder.jp/user/{}/history'.format(id))

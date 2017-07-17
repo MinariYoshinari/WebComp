@@ -16,9 +16,10 @@ app.config.from_object(__name__)
 def create_graph(username="Noimin", rivalname="tourist"):
     me = User(username)
     rival = User(rivalname)
-    if me.message:
-        return render_template('show_graph.html', me=me, rival=rival)
-    graph = Graph(me, rival)
+    if me.performances is None or (rival.performances is None and rival.id):
+        graph = None
+    else:
+        graph = Graph(me, rival)
     return render_template('show_graph.html', me=me, rival=rival, graph=graph)
 
 @app.route('/')

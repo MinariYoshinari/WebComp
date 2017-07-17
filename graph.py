@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import requests
 import datetime
 from user import User
 
@@ -24,26 +25,28 @@ class Graph:
         merged_performances = self.__merge_performances()
         min_date = min(merged_performances.keys())
         max_date = max(merged_performances.keys())
-        #いー感じにURL作ってくれるメソッドがあったはずでは？
-        url = "http://chart.apis.google.com/chart?chs=400x300&chd=t:"
+
+        BASE_URL = "http://chart.apis.google.com/chart"
+        params = {
+            "chs": "400x300", 
+            "chd": "t:", 
+            "cht": "lxy",
+            "chxt": "x,y",
+            "chxl": "0:|{}|{}".format(datetime_to_label(self.dates[min_date]), datetime_to_label(self.dates[max_date])),
+            "chds": "a",    # 目盛の自動調整
+            "chdl": "|".join([user.id for user in self.users]),
+            "chco": ",".join([colors[i] for i in range(len(self.users))])
+            }
         dates_url = ",".join([str(date_int) for date_int in merged_performances.keys()]) + "|"
         for i in range(len(self.users)):
-            url += dates_url
+            params["chd"] += dates_url
             for contest in merged_performances.values():
-                url += str(contest[i]) + ","
-            url = url[:-1] + "|"
-        url = url[:-1]
-        url += "&cht=lxy"
-        url += "&chxt=x,y"
-        url += "&chxl=0:|{}|{}".format(datetime_to_label(self.dates[min_date]), datetime_to_label(self.dates[max_date]))
-        url += "&chds=a"    #目盛の自動調整
-        url += "&chdl=" + "|".join([user.id for user in self.users])
-        url += "&chco=" + ",".join([colors[i] for i in range(len(self.users))])
-        # 将来4色対応するとき用
-        # url += "&chco=" + ",".join([colors[i % len(colors)] for i in range(len(self.users))])
-        # url += "&chf=bg,s,eeeeee|c,ls,90,99ffff,0.1,ffff99,0.1"
-        print(url)
-        return url
+                params["chd"] += str(contest[i]) + ","
+            params["chd"] = params["chd"][:-1] + "|"
+        params["chd"] = params["chd"][:-1]
+
+        r = requests.get(BASE_URL, params=params)
+        return r.url
 
     def __merge_performances(self):
         dates = []
@@ -65,7 +68,6 @@ class Graph:
             date_int = self.__timedelta_to_int(date-min_date)
             merged_performances[date_int] = results
             self.dates[date_int] = date;
-        import pprint; pprint.pprint(merged_performances)
         return merged_performances
 
     def __timedelta_to_int(self, timedelta):
