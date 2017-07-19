@@ -18,7 +18,7 @@ class Graph:
         min_ = min(user.min for user in self.users)
         upper_limit = (max_// 400 + 1) * 400
         lower_limit  = (min_ // 400  - 1) * 400
-        colors = ("377BA8", "a74737")
+        colors = ("990000", "000099")
         # 将来4色対応するとき用に
         #, "519c4c", "7f5593")
 
@@ -32,10 +32,12 @@ class Graph:
             "chd": "t:", 
             "cht": "lxy",
             "chxt": "x,y",
+            "chxr": "1,0,5000",
             "chxl": "0:|{}|{}".format(datetime_to_label(self.dates[min_date]), datetime_to_label(self.dates[max_date])),
             "chds": "a",    # 目盛の自動調整
             "chdl": "|".join([user.id for user in self.users]),
-            "chco": ",".join([colors[i] for i in range(len(self.users))])
+            "chco": ",".join([colors[i] for i in range(len(self.users))]),
+            "chf": "c,ls,90,bfbfbf,0.08,d2b48c,0.08,99ff99,0.08,99ffff,0.08,9999ff,0.08,ffff99,0.08,ffcc99,0.08,ff9999,0.44" # 背景色
             }
         dates_url = ",".join([str(date_int) for date_int in merged_performances.keys()]) + "|"
         for i in range(len(self.users)):

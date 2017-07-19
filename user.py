@@ -23,7 +23,7 @@ class User:
     
     def __get_performances(self, id):
         request = requests.get('https://atcoder.jp/user/{}/history'.format(id))
-        time.sleep(0.5)
+        time.sleep(0.2)
         bs_obj = BeautifulSoup(request.text, 'html.parser')
         table = bs_obj.find('table', id='history')
 
