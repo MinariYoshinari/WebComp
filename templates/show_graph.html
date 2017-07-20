@@ -1,14 +1,18 @@
 {% extends "layout.html" %}
     {% block body %}
-        <h1>AtCoder Performances</h1>
+        <div class="page-header">
+            <h1>AtCoder Performances</h1>
+        </div>
         <form action="{{ url_for('show_graph') }}" method=post>
-            <dl>
-                <dt>You(Required):
-                <dd><input type=text name=username placeholder="User ID" value="{{ me.id }}">
-                <dt>Rival(Optional):
-                <dd><input type=text name=rivalname placeholder="User ID" value="{{ rival.id }}">
-                <dd style="padding: 10px 0 0 0"><input type=submit value="Show graph" class="btn btn-primary">
-            </dl>
+            <div class="form-group">
+                <label>You(Required):
+                <input type=text name=username placeholder="User ID" value="{{ me.id }}">
+            </div>
+            <div class="form-group">
+                <label>Rival(Optional):
+                <input type=text name=rivalname placeholder="User ID" value="{{ rival.id }}">
+            </div>
+            <input type=submit value="Show graph" class="btn btn-primary">
         </form>
         {% if input %}
             {% if not(graph) %}
@@ -34,9 +38,8 @@
                 <div class="row">
                     <img src={{ graph.url }} class="col-xs-10 col-sm-10 col-md-6 col-lg-6">
                 </div>
-
                 <h2>Average, Min, Max
-                    <a href="https://twitter.com/intent/tweet?button_hashtag=AtCoder_Performances&text={{ me.id }}%E3%81%95%E3%82%93%E3%81%AE%E5%B9%B3%E5%9D%87%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%E3%81%AF{{ me.avg }}%E3%81%A7%EF%BC%8C%E6%9C%80%E6%96%B05%E5%9B%9E%E5%88%86%E3%81%AE%E5%B9%B3%E5%9D%87%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%E3%81%AF{{ me.avg5 }}%E3%81%A7%E3%81%99%E3%80%82" class="twitter-hashtag-button" data-url="https://atcoder-performances.herokuapp.com/">Tweet #AtCoder_Performances</a>
+                    <a href="https://twitter.com/intent/tweet?text={{ me.id }}%E3%81%95%E3%82%93%E3%81%AE%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%20%E6%9C%80%E6%96%B05%E5%9B%9E%E5%88%86%E3%81%AE%E5%B9%B3%E5%9D%87%3A{{ me.avg5 }}%20%E5%B9%B3%E5%9D%87%3A{{ me.avg }}%20%E6%9C%80%E4%BD%8E%3A{{ me.min }}%20%E6%9C%80%E9%AB%98%3A{{ me.max }}" class="twitter-hashtag-button" data-url="https://atcoder-performances.herokuapp.com/">Tweet #AtCoder_Performances</a>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </h2>
                 <div class="row">
