@@ -22,10 +22,13 @@ class User:
             self.avg5 = round(sum(islice(self.performances.values(), 5)) / 5)
     
     def __get_performances(self, id):
-        request = requests.get('https://atcoder.jp/user/{}/history'.format(id))
-        time.sleep(0.2)
-        bs_obj = BeautifulSoup(request.text, 'html.parser')
-        table = bs_obj.find('table', id='history')
+        if id:
+            request = requests.get('https://atcoder.jp/user/{}/history'.format(id))
+            time.sleep(0.2)
+            bs_obj = BeautifulSoup(request.text, 'html.parser')
+            table = bs_obj.find('table', id='history')
+        else:
+            table = None
 
         # 存在しないユーザだった場合
         if table is None:
