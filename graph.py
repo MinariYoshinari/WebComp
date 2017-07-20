@@ -30,12 +30,13 @@ class Graph:
 
         BASE_URL = "http://chart.apis.google.com/chart"
         params = {
-            "chs": "400x300",   # グラフのサイズ
+            "chs": "600x400",   # グラフのサイズ
             "chd": "t:",    # データの中身
             "cht": "lxy",
             "chxt": "x,y",
             "chxr": "1,0,{}".format(max_), # 軸の値の範囲
             "chxl": "0:|{}|{}".format(datetime_to_label(self.dates[min_date]), datetime_to_label(self.dates[max_date])),
+            "chxs": "0,666666,16|1,666666,16", # 軸のスタイル
             "chds": "a",    # 目盛の自動調整
             "chdl": "|".join([user.id for user in self.users]),
             "chco": ",".join([colors[i] for i in range(len(self.users))]),
