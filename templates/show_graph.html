@@ -3,9 +3,9 @@
         <h1>AtCoder Performances</h1>
         <form action="{{ url_for('show_graph') }}" method=post>
             <dl>
-                <dt>You:
+                <dt>You(Required):
                 <dd><input type=text name=username placeholder="User ID" value="{{ me.id }}">
-                <dt>Rival:
+                <dt>Rival(Optional):
                 <dd><input type=text name=rivalname placeholder="User ID" value="{{ rival.id }}">
                 <dd style="padding: 10px 0 0 0"><input type=submit value="Show graph" class="btn btn-primary">
             </dl>
