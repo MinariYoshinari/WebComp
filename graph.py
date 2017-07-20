@@ -14,7 +14,7 @@ class Graph:
         def datetime_to_label(dt):
             return "{}-{}-{}".format(dt.year, dt.month, dt.day)
 
-        max_ = max(user.max for user in self.users)
+        max_ = (max(user.max for user in self.users) + 500) // 500 * 500
         min_ = min(user.min for user in self.users)
         upper_limit = (max_// 400 + 1) * 400
         lower_limit  = (min_ // 400  - 1) * 400
@@ -25,25 +25,27 @@ class Graph:
         merged_performances = self.__merge_performances()
         min_date = min(merged_performances.keys())
         max_date = max(merged_performances.keys())
+        stripe = 400 / max_
+        print(max_)
 
         BASE_URL = "http://chart.apis.google.com/chart"
         params = {
-            "chs": "400x300", 
-            "chd": "t:", 
+            "chs": "400x300",   # グラフのサイズ
+            "chd": "t:",    # データの中身
             "cht": "lxy",
             "chxt": "x,y",
-            #"chxr": "1,0,5000",
+            "chxr": "1,0,{}".format(max_), # 軸の値の範囲
             "chxl": "0:|{}|{}".format(datetime_to_label(self.dates[min_date]), datetime_to_label(self.dates[max_date])),
             "chds": "a",    # 目盛の自動調整
             "chdl": "|".join([user.id for user in self.users]),
             "chco": ",".join([colors[i] for i in range(len(self.users))]),
-            #"chf": "c,ls,90,bfbfbf,0.08,d2b48c,0.08,99ff99,0.08,99ffff,0.08,9999ff,0.08,ffff99,0.08,ffcc99,0.08,ff9999,0.44" # 背景色
+            "chf": "c,ls,90,bfbfbf,{0},d2b48c,{0},99ff99,{0},99ffff,{0},9999ff,{0},ffff99,{0},ffcc99,{0},ff9999,{1}".format(stripe, max(0, 1.0-stripe*7.0)) # 背景色
             }
         dates_url = ",".join([str(date_int) for date_int in merged_performances.keys()]) + "|"
         for i in range(len(self.users)):
             params["chd"] += dates_url
             for contest in merged_performances.values():
-                params["chd"] += str(contest[i]) + ","
+                params["chd"] += str(contest[i]/max_*100 if contest[i] != -1 else -1) + ","
             params["chd"] = params["chd"][:-1] + "|"
         params["chd"] = params["chd"][:-1]
 
