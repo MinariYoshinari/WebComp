@@ -18,8 +18,13 @@ class User:
         else:
             self.max = self.__get_max(self.performances)
             self.min = self.__get_min(self.performances)
-            self.avg = round(sum(self.performances.values()) / len(self.performances))
-            self.avg5 = round(sum(islice(self.performances.values(), 5)) / 5)
+            participation_count = len(self.performances)
+            if participation_count > 0:
+                self.avg = round(sum(self.performances.values()) / participation_count)
+                self.avg5 = round(sum(islice(self.performances.values(), 5)) / min(5, participation_count))
+            else:
+                self.avg = None
+                self.avg5 = None
     
     def __get_performances(self, id):
         if id:
