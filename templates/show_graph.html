@@ -1,5 +1,29 @@
-{% extends "layout.html" %}
-    {% block body %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AtCoder Performances</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}"> -->
+    <!-- Twitter Card設定 -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--<meta name="twitter:title" content="そのページのタイトル" />-->
+    <meta name="twitter:description" content="AtCoderのコンテストでのパフォーマンスをライバルと比較します" />
+    <meta name="twitter:image" content="{{ graph.url }}" />
+    <meta name="twitter:url" content="https://atcoder-performances.herokuapp.com/" />
+    <!--
+        <meta name="twitter:site" content="サイトのTwitterアカウント" />
+        <meta name="twitter:creator" content="そのページの執筆者のTwitterアカウント" /> 
+    -->
+</head>
+<body>
+    <div class="container">
+        <div class="row" style="mergin-left: 50px; padding-left:50px">
+
+
+            
         <div class="page-header">
             <h1>AtCoder Performances</h1>
         </div>
@@ -56,4 +80,12 @@
                 </div>
             {% endif %}
         {% endif %}
-    {% endblock %}
+
+
+
+        </div>
+    </div>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</body>
+</html>
