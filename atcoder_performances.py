@@ -27,9 +27,10 @@ def create_graph(username="", rivalname=""):
 def init_graph():
     return create_graph()
 
-@app.route('/', methods=['POST'])
+@app.route('/show_graph', methods=['GET', 'POST'])
 def show_graph():
-    return create_graph(request.form['username'], request.form['rivalname'])
+    #return create_graph(request.form['username'], request.form['rivalname'])
+    return create_graph(request.args.get('username'), request.args.get('rivalname'))
 
 if __name__ == '__main__':
     app.run()

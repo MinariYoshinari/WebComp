@@ -7,25 +7,17 @@
     <title>AtCoder Performances</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}"> -->
-    <!-- Twitter Card設定 -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="そのページのタイトル" />
-    <meta name="twitter:description" content="AtCoderのコンテストでのパフォーマンスをライバルと比較します" />
-    <meta name="twitter:image" content="{{ graph.url }}" />
-    <meta name="twitter:url" content="https://atcoder-performances.herokuapp.com/" />
-    <meta name="twitter:site" content="@noisy_noimin" />
-    <meta name="twitter:creator" content="@noisy_noimin" /> 
 </head>
 <body>
     <div class="container">
         <div class="row" style="mergin-left: 50px; padding-left:50px">
 
 
-            
+
         <div class="page-header">
             <h1>AtCoder Performances</h1>
         </div>
-        <form action="{{ url_for('show_graph') }}" method=post>
+        <form action="{{ url_for('show_graph') }}" method=get>
             <div class="form-group">
                 <label>You(Required):
                 <input type=text name=username placeholder="User ID" value="{{ me.id }}">
@@ -61,7 +53,7 @@
                     <img src={{ graph.url }} class="col-xs-10 col-sm-10 col-md-6 col-lg-6">
                 </div>
                 <h2>Average, Min, Max
-                    <a href="https://twitter.com/intent/tweet?text={{ me.id }}%E3%81%95%E3%82%93%E3%81%AE%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%20%E6%9C%80%E6%96%B05%E5%9B%9E%E5%88%86%E3%81%AE%E5%B9%B3%E5%9D%87%3A{{ me.avg5 }}%20%E5%B9%B3%E5%9D%87%3A{{ me.avg }}%20%E6%9C%80%E4%BD%8E%3A{{ me.min }}%20%E6%9C%80%E9%AB%98%3A{{ me.max }}" class="twitter-hashtag-button" data-url="https://atcoder-performances.herokuapp.com/">Tweet #AtCoder_Performances</a>
+                    <a href="https://twitter.com/intent/tweet?text={{ me.id }}%E3%81%95%E3%82%93%E3%81%AE%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%20%E6%9C%80%E6%96%B05%E5%9B%9E%E5%88%86%E3%81%AE%E5%B9%B3%E5%9D%87%3A{{ me.avg5 }}%20%E5%B9%B3%E5%9D%87%3A{{ me.avg }}%20%E6%9C%80%E4%BD%8E%3A{{ me.min }}%20%E6%9C%80%E9%AB%98%3A{{ me.max }}" class="twitter-hashtag-button" data-url="https://atcoder-performances.herokuapp.com/show_graph?username={{ me.id }}&rivalname={{ rival.id }}">Tweet</a>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </h2>
                 <div class="row">
