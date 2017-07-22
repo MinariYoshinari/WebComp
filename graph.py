@@ -21,14 +21,13 @@ class Graph:
 
         merged_performances = self.__merge_performances()
         participation_count = len(merged_performances)
-        if participation_count > 20:
-            merged_performances = islice(
-                merged_performances.items(), 
-                participation_count-20, 
-                None
-                )
-            merged_performances = OrderedDict(merged_performances)
-        import pprint; pprint.pprint(merged_performances)
+        merged_performances = islice(
+            merged_performances.items(), 
+            participation_count-20, 
+            None
+            )
+        merged_performances = OrderedDict(merged_performances)
+
         max_ = (max(user.max for user in self.users) + 500) // 500 * 500
         # min_ = (min(user.min for user in self.users) - 500) // 500 * 500
         min_date = min(merged_performances.keys())
@@ -49,16 +48,11 @@ class Graph:
             "chf": "c,ls,90,bfbfbf,{0},d2b48c,{0},99ff99,{0},99ffff,{0},9999ff,{0},ffff99,{0},ffcc99,{0},ff9999,{1}".format(stripe, max(0, 1.0-stripe*7.0)) # 背景色
             }
         range_date = max_date-min_date
-        
+        dates_url = ",".join([str((date_int-min_date)/range_date*100.0) for date_int in merged_performances.keys()]) + "|"
         for i in range(len(self.users)):
-            params["chd"] += ",".join([
-                    str((date_int-min_date)/range_date*100.0) 
-                    for date_int in merged_performances.keys() 
-                    if merged_performances[date_int][i] != -1
-                    ]) + "|"
+            params["chd"] += dates_url
             for contest in merged_performances.values():
-                if contest[i] != -1:
-                    params["chd"] += str(contest[i]/max_*100.0) + ","
+                params["chd"] += str(contest[i]/max_*100.0 if contest[i] != -1 else -1) + ","
             params["chd"] = params["chd"][:-1] + "|"
         params["chd"] = params["chd"][:-1]
         r = requests.post(BASE_URL, params=params)
@@ -80,10 +74,10 @@ class Graph:
                     results.append(user.performances[date])
                     lasts[i] = user.performances[date]
                 else:
-                    results.append(-1)
+                    results.append(lasts[i])
             date_int = self.__timedelta_to_int(date-min_date)
             merged_performances[date_int] = results
-            self.dates[date_int] = date
+            self.dates[date_int] = date;
         return merged_performances
 
     def __timedelta_to_int(self, timedelta):
