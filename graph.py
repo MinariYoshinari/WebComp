@@ -21,12 +21,13 @@ class Graph:
 
         merged_performances = self.__merge_performances()
         participation_count = len(merged_performances)
-        merged_performances = islice(
-            merged_performances.items(), 
-            participation_count-20, 
-            None
-            )
-        merged_performances = OrderedDict(merged_performances)
+        if participation_count > 20:
+            merged_performances = islice(
+                merged_performances.items(), 
+                participation_count-20, 
+                None
+                )
+            merged_performances = OrderedDict(merged_performances)
 
         max_ = (max(user.max for user in self.users) + 500) // 500 * 500
         # min_ = (min(user.min for user in self.users) - 500) // 500 * 500
