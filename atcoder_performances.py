@@ -13,7 +13,7 @@ SECRET_KEY = 'development key'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-def create_graph(username="", rivalname=""):
+def create_graph(username="", rivalname="", tweet=False):
     input_ = username or rivalname
     me = User(username)
     rival = User(rivalname)
@@ -21,16 +21,22 @@ def create_graph(username="", rivalname=""):
         graph = None
     else:
         graph = Graph(me, rival)
+    if tweet:
+        graph.tweet_img()
     return render_template('show_graph.html', input=input_, me=me, rival=rival, graph=graph)
 
 @app.route('/')
 def init_graph():
     return create_graph()
 
-@app.route('/show_graph', methods=['GET', 'POST'])
+@app.route('/show_graph', methods=['GET'])
 def show_graph():
     #return create_graph(request.form['username'], request.form['rivalname'])
     return create_graph(request.args.get('username'), request.args.get('rivalname'))
+
+@app.route('/tweet_img', methods=['POST', 'GET'])
+def tweet_img():
+    return create_graph(request.args.get('username'), request.args.get('rivalname'), tweet=True)
 
 if __name__ == '__main__':
     app.run()

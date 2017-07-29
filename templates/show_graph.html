@@ -49,11 +49,16 @@
                 </div>
             {% else %}
                 <h2>Graph(最新20件分)</h2>
+                <form action="{{ url_for('tweet_img') }}" method=get>
+                    <input type=hidden name=username value="{{ me.id }}">
+                    <input type=hidden name=rivalname value="{{ rival.id }}">
+                    <input type=submit value="Tweet graph" class="btn btn-primary">
+                </form>
                 <div class="row">
                     <img src={{ graph.url }} class="col-xs-10 col-sm-10 col-md-6 col-lg-6">
                 </div>
                 <h2>Average, Min, Max
-                    <a href="https://twitter.com/intent/tweet?text={{ me.id }}%E3%81%95%E3%82%93%E3%81%AE%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%20%E6%9C%80%E6%96%B05%E5%9B%9E%E5%88%86%E3%81%AE%E5%B9%B3%E5%9D%87%3A{{ me.avg5 }}%20%E5%B9%B3%E5%9D%87%3A{{ me.avg }}%20%E6%9C%80%E4%BD%8E%3A{{ me.min }}%20%E6%9C%80%E9%AB%98%3A{{ me.max }}" class="twitter-hashtag-button" data-url="https://atcoder-performances.herokuapp.com/show_graph?username={{ me.id }}&rivalname={{ rival.id }}">Tweet</a>
+                    <a href="https://twitter.com/intent/tweet?text={{ me.id }}%E3%81%95%E3%82%93%E3%81%AE%E3%83%91%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%B3%E3%82%B9%20%E6%9C%80%E6%96%B05%E5%9B%9E%E5%88%86%E3%81%AE%E5%B9%B3%E5%9D%87%3A{{ me.avg5 }}%20%E5%B9%B3%E5%9D%87%3A{{ me.avg }}%20%E6%9C%80%E4%BD%8E%3A{{ me.min }}%20%E6%9C%80%E9%AB%98%3A{{ me.max }} {{graph.url}}" class="twitter-hashtag-button" data-url="https://atcoder-performances.herokuapp.com/show_graph?username={{ me.id }}&rivalname={{ rival.id }}">Tweet</a>
                     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                 </h2>
                 <div class="row">

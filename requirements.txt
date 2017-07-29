@@ -74,3 +74,6 @@ wcwidth==0.1.7
 Werkzeug==0.12.2
 widgetsnbextension==1.2.6
 zope.interface==4.3.3
+oauthlib==2.0.2
+requests-oauthlib==0.8.0 
+tweepy==3.5.0

@@ -1,13 +1,20 @@
 from collections import OrderedDict
 from itertools import islice
+import os
 import requests
 import datetime
+import time
+import json
+# import base64
+from requests_oauthlib import OAuth1Session
 from user import User
 
 class Graph:
     def __init__(self, *users):
         self.users = [user for user in users if user.performances is not None]
         self.dates = {}
+        self.response = None
+        self.id = None
         self.url = self.__generate_url()
 
     def __generate_url(self):
@@ -56,8 +63,8 @@ class Graph:
                 params["chd"] += str(contest[i]/max_*100.0 if contest[i] != -1 else -1) + ","
             params["chd"] = params["chd"][:-1] + "|"
         params["chd"] = params["chd"][:-1]
-        r = requests.post(BASE_URL, params=params)
-        return r.url
+        self.response = requests.post(BASE_URL, params=params)
+        return self.response.url
 
     def __merge_performances(self):
         dates = []
@@ -87,3 +94,43 @@ class Graph:
             return int(str(timedelta).split()[0])
         else:
             return 0
+
+    def tweet_img(self):
+        CK = "xsLYwLySAkrxUkCupclsvdpQg"
+        CS = "rYpyADgCK16kN86vJ8ya4tyn9s86UeKj2JXgMU1okl3ShfWzYB"
+        AT = "2791735616-lJWzdz1RicKTuVck4IMy4Ihf3Ecd7jhXG99Dfj6"
+        AS = "PxlmGhmVgsIbzQ8gdgISBF0K510YHgq0glkGN9KPWsV07"
+        UPDATE_URL = "https://api.twitter.com/1.1/statuses/update.json"
+        twitter = OAuth1Session(CK, CS, AT, AS)
+
+        img_path = self.__save_img(self.response.content)
+        self.__upload_img(twitter, img_path)
+        status = "{}のパフォーマンスのグラフ {}".format(
+            "と".join([user.id+"さん" for user in self.users]),
+            "https://atcoder-performances.herokuapp.com/show_graph?username={}&rivalname={}".format(self.users[0].id, "" if len(self.users) == 1 else self.users[1].id)
+            )
+        params = {'status': status, "media_ids": [self.id]}
+        tweet_response = twitter.post(UPDATE_URL, params = params)
+
+    def __save_img(self, img):
+        filename = str(int(time.time()* 10**5)) + '.png'
+        fullpath = os.path.join('img', filename)
+
+        with open(fullpath, 'wb') as f:
+            f.write(img)
+        
+        return fullpath
+
+    def __upload_img(self, twitter, img_path):
+        UPLOAD_URL = "https://upload.twitter.com/1.1/media/upload.json"
+
+        f = open(img_path, 'rb')
+        files = {"media": f}
+        upload_response = twitter.post(UPLOAD_URL, files=files)
+        f.close()
+        # uploadに失敗したらMedia idはNone
+        if upload_response.status_code != 200:
+            return
+
+        self.id = json.loads(upload_response.text)['media_id_string']
+        os.remove(img_path)
