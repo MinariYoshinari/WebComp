@@ -59,10 +59,10 @@
                 <div class="row">
                     <div class="col-xs-10 col-sm-10 col-md-6 col-lg-6">
                         <table class="table table-striped">
-                            <tr><th></th><th>average(last 5 contests)</th><th>average(all)</th><th>min(all)</th><th>max(all)</th></tr>
-                            <tr><td>{{ me.id }}</td><td>{{ me.avg5 }}</td><td>{{ me.avg }}</td><td>{{ me.min }}</td><td>{{ me.max }}</td></tr>
+                            <tr><th></th><th>average(last 5 contests)</th><th>average(all)</th><th>min(all)</th><th>max(all)</th><th>standard　deviation</th></tr>
+                            <tr><td>{{ me.id }}</td><td>{{ me.avg5 }}</td><td>{{ me.avg }}</td><td>{{ me.min }}</td><td>{{ me.max }}</td><td>{{ me.std }}</td></tr>
                             {% if rival.performances %}
-                                <tr><td>{{ rival.id }}</td><td>{{ rival.avg5 }}</td><td>{{ rival.avg }}</td><td>{{ rival.min }}</td><td>{{ rival.max }}</td></tr>
+                                <tr><td>{{ rival.id }}</td><td>{{ rival.avg5 }}</td><td>{{ rival.avg }}</td><td>{{ rival.min }}</td><td>{{ rival.max }}</td><td>{{ rival.std }}</td></tr>
                             {% endif %}
                         </table>
                     </div>

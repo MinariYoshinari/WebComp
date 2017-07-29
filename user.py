@@ -4,27 +4,26 @@ import datetime
 from collections import OrderedDict
 from itertools import islice
 import time
+import numpy as np
 
 class User:
     def __init__(self, id):
         self.id = id
         self.performances = self.__get_performances(id)
-        if self.performances is None:
+        participation_count = len(self.performances)
+        if self.performances is None or participation_count == 0:
             self.max = None
             self.min = None
             self.avg = None
             self.avg5 = None
+            self.std = None
             return
         else:
             self.max = self.__get_max(self.performances)
             self.min = self.__get_min(self.performances)
-            participation_count = len(self.performances)
-            if participation_count > 0:
-                self.avg = round(sum(self.performances.values()) / participation_count)
-                self.avg5 = round(sum(islice(self.performances.values(), 5)) / min(5, participation_count))
-            else:
-                self.avg = None
-                self.avg5 = None
+            self.avg = round(sum(self.performances.values()) / participation_count)
+            self.avg5 = round(sum(islice(self.performances.values(), 5)) / min(5, participation_count))
+            self.std = int(round(np.std(list(self.performances.values()))))
     
     def __get_performances(self, id):
         if id:
