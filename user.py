@@ -10,8 +10,7 @@ class User:
     def __init__(self, id):
         self.id = id
         self.performances = self.__get_performances(id)
-        participation_count = len(self.performances)
-        if self.performances is None or participation_count == 0:
+        if self.performances is None:
             self.max = None
             self.min = None
             self.avg = None
@@ -19,6 +18,7 @@ class User:
             self.std = None
             return
         else:
+            participation_count = len(self.performances)
             self.max = self.__get_max(self.performances)
             self.min = self.__get_min(self.performances)
             self.avg = round(sum(self.performances.values()) / participation_count)
